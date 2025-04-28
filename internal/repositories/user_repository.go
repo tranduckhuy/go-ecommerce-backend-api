@@ -1,5 +1,7 @@
 package repositories
 
+import "fmt"
+
 type UserRepository struct{}
 
 func NewUserRepository() *UserRepository {
@@ -11,5 +13,5 @@ func (ur *UserRepository) GetUserByID(userID string) (string, error) {
 	if userID == "1" {
 		return "User 1", nil
 	}
-	return "", nil
+	return "", fmt.Errorf("user not found")
 }

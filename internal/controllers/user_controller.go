@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/tranduckhuy/go-ecommerce-backend-api/internal/services"
+	"github.com/tranduckhuy/go-ecommerce-backend-api/pkg/responses"
 )
 
 type UsersController struct {
@@ -21,8 +22,9 @@ func (u *UsersController) GetUserByID(c *gin.Context) {
 	userID := c.Param("id")
 	user, err := u.userService.GetUserByID(userID)
 	if err != nil {
-		c.JSON(500, gin.H{"error": "User not found"})
+		responses.Respond(c, responses.UserNotFound, nil)
 		return
 	}
-	c.JSON(200, gin.H{"user": user})
+
+	responses.Respond(c, responses.Success, user)
 }

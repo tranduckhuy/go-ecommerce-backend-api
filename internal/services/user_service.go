@@ -1,6 +1,8 @@
 package services
 
-import "github.com/tranduckhuy/go-ecommerce-backend-api/internal/repositories"
+import (
+	"github.com/tranduckhuy/go-ecommerce-backend-api/internal/repositories"
+)
 
 type UserService struct {
 	userRepository *repositories.UserRepository
