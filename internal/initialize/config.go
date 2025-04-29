@@ -21,7 +21,7 @@ var GlobalConfig Config
 
 func InitConfig() {
 	v := viper.New()
-	v.SetConfigName("config") // config.yaml
+	v.SetConfigName("local")
 	v.SetConfigType("yaml")
 	v.AddConfigPath("./configs")
 

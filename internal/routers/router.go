@@ -3,10 +3,12 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/tranduckhuy/go-ecommerce-backend-api/internal/controllers"
+	"github.com/tranduckhuy/go-ecommerce-backend-api/internal/middlewares"
 )
 
 func NewRouter() *gin.Engine {
 	r := gin.Default()
+	r.Use(middlewares.AuthMiddleware())
 
 	v1 := r.Group("/api/v1")
 	{
