@@ -4,22 +4,10 @@ import (
 	"fmt"
 
 	"github.com/spf13/viper"
+	"github.com/tranduckhuy/go-ecommerce-backend-api/global"
 )
 
-type Config struct {
-	// Logger configuration
-	Logger LogConfig `mapstructure:"logger"`
-}
-
-type LogConfig struct {
-	Level      string `mapstructure:"log_level"`
-	OutputPath string `mapstructure:"output_path"`
-	Encoding   string `mapstructure:"encoding"`
-}
-
-var GlobalConfig Config
-
-func InitConfig() {
+func LoadConfig() {
 	v := viper.New()
 	v.SetConfigName("local")
 	v.SetConfigType("yaml")
@@ -30,8 +18,7 @@ func InitConfig() {
 		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
 
-	err = v.Unmarshal(&GlobalConfig)
-	if err != nil {
+	if err = v.Unmarshal(&global.Config); err != nil {
 		panic(fmt.Errorf("fatal error unmarshal config: %w", err))
 	}
 }

@@ -1,9 +1,10 @@
 package initialize
 
-import "github.com/tranduckhuy/go-ecommerce-backend-api/pkg/logger"
+import (
+	"github.com/tranduckhuy/go-ecommerce-backend-api/global"
+	"github.com/tranduckhuy/go-ecommerce-backend-api/pkg/logger"
+)
 
 func InitLogger() {
-	cfg := GlobalConfig.Logger
-
-	logger.NewLogger(cfg.Level, cfg.OutputPath, cfg.Encoding)
+	global.Logger = logger.NewLogger(global.Config.Logger)
 }

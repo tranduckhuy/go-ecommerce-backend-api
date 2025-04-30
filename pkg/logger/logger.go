@@ -3,24 +3,28 @@ package logger
 import (
 	"os"
 
+	"github.com/natefinch/lumberjack"
+	"github.com/tranduckhuy/go-ecommerce-backend-api/pkg/settings"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-var Logger *zap.Logger
+type LoggerZap struct {
+	*zap.Logger
+}
 
-func NewLogger(levelStr, outputPath, encoding string) {
+func NewLogger(config settings.LogConfig) *LoggerZap {
 	var level zapcore.Level
-	err := level.UnmarshalText([]byte(levelStr))
+	err := level.UnmarshalText([]byte(config.Level))
 	if err != nil {
 		level = zapcore.InfoLevel
 	}
 
-	config := getEncoder(encoding)
-	writer := getLogWriter(outputPath)
+	encoder := getEncoder(config.Encoding)
+	writer := getLogWriter(config)
 
-	core := zapcore.NewCore(config, writer, level)
-	Logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zap.ErrorLevel))
+	core := zapcore.NewCore(encoder, writer, level)
+	return &LoggerZap{zap.New(core, zap.AddCaller(), zap.AddStacktrace(zap.ErrorLevel))}
 }
 
 func getEncoder(encoding string) zapcore.Encoder {
@@ -36,11 +40,14 @@ func getEncoder(encoding string) zapcore.Encoder {
 	return zapcore.NewConsoleEncoder(encoderConfig)
 }
 
-func getLogWriter(filepath string) zapcore.WriteSyncer {
-	file, err := os.OpenFile(filepath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		panic(err)
+func getLogWriter(config settings.LogConfig) zapcore.WriteSyncer {
+	hook := lumberjack.Logger{
+		Filename:   config.OutputPath,
+		MaxSize:    config.MaxSize, // megabytes
+		MaxBackups: config.MaxBackups,
+		MaxAge:     config.MaxAge, // days
+		Compress:   config.Compress,
 	}
 
-	return zapcore.NewMultiWriteSyncer(zapcore.AddSync(file), zapcore.AddSync(os.Stdout))
+	return zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), zapcore.AddSync(&hook))
 }

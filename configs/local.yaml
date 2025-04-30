@@ -2,20 +2,20 @@ server:
   port: 8082
   mode: "dev"
 mysql:
-  host: 127.0.0.1
-  port: 33306
+  host: localhost
+  port: 3306
   username: root
-  password: root1234
-  dbname: shopdevgo
-  maxIdleConns: 10
-  maxOpenConns: 100
-  connMaxLifetime: 3600
+  password: huytd
+  dbname: goshop
+  max_idle_conns: 10
+  max_open_conns: 100
+  conn_max_lifetime: 3600
 logger:
   log_level: debug
   output_path: "./storages/logs/dev.001.log"
-  max_backups: 30
-  max_age: 7
-  max_size: 1024
+  max_backups: 3
+  max_age: 28
+  max_size: 10
   compress: true
   encoding: "json"
 redis:
