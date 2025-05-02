@@ -5,6 +5,8 @@ type Config struct {
 	Logger LogConfig `mapstructure:"logger"`
 	// PostgreSQL database configuration
 	MySQL MySQLConfig `mapstructure:"mysql"`
+	// Redis database configuration
+	Redis RedisConfig `mapstructure:"redis"`
 }
 
 type LogConfig struct {
@@ -26,4 +28,12 @@ type MySQLConfig struct {
 	MaxIdleConns    int    `mapstructure:"max_idle_conns"`
 	MaxOpenConns    int    `mapstructure:"max_open_conns"`
 	ConnMaxLifetime int    `mapstructure:"conn_max_lifetime"`
+}
+
+type RedisConfig struct {
+	Host     string `mapstructure:"host"`
+	Port     int    `mapstructure:"port"`
+	Password string `mapstructure:"password"`
+	Db       int    `mapstructure:"database"`
+	PoolSize int    `mapstructure:"pool_size"`
 }

@@ -19,10 +19,11 @@ logger:
   compress: true
   encoding: "json"
 redis:
-  host: 127.0.0.1
-  port: 6331
+  host: localhost
+  port: 6379
   password:
   database: 0
+  pool_size: 10
 jwt:
   TOKEN_HOUR_LIFESPAN: 1
   JWT_EXPIRATION: 1h
