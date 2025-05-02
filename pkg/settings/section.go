@@ -1,12 +1,19 @@
 package settings
 
 type Config struct {
+	// Server configuration
+	Server ServerConfig `mapstructure:"server"`
 	// Logger configuration
 	Logger LogConfig `mapstructure:"logger"`
 	// PostgreSQL database configuration
 	MySQL MySQLConfig `mapstructure:"mysql"`
 	// Redis database configuration
 	Redis RedisConfig `mapstructure:"redis"`
+}
+
+type ServerConfig struct {
+	Port int    `mapstructure:"port"`
+	Mode string `mapstructure:"mode"`
 }
 
 type LogConfig struct {
