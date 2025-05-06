@@ -1,0 +1,57 @@
+services:
+  mysql:
+    image: mysql:9.3.0
+    container_name: go-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: huytd
+      MYSQL_DATABASE: goshop
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:alpine3.20
+    container_name: go-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  kafka:
+    image: "bitnami/kafka:3.5"
+    container_name: kafka_container
+    environment:
+      KAFKA_ENABLE_KRAFT: yes
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_LISTENERS: PLAINTEXT://0.0.0.0:9094,CONTROLLER://0.0.0.0:9095,HOST://0.0.0.0:19094
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka_container:9094,HOST://localhost:19094
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,HOST:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka_container:9095"
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_HEAP_OPTS: -Xmx512M -Xms256M
+      KAFKA_KRAFT_CLUSTER_ID: "5Y7p4jXZRk6v8tY3qA1b2Q"
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
+    ports:
+      - "19094:19094"
+      - "9094:9094"
+      - "9095:9095"
+    volumes:
+      - ./kafka/broker1:/bitnami/kafka:rw
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui_container
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka_container:9094
+    ports:
+      - "9090:8080"
+    depends_on:
+      - kafka
+
+volumes:
+  mysql_data:
+  redis_data:

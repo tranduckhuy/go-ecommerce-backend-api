@@ -17,3 +17,4 @@
 # config files
 
 configs/production.yaml
+/kafka
