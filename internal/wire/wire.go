@@ -17,7 +17,18 @@ var ProductSet = wire.NewSet(
 	product.NewRouter,
 )
 
+var UserSet = wire.NewSet(
+	repositories.NewUserRepository,
+	services.NewUserService,
+	controllers.NewUsersController,
+)
+
 func InitProductRouter() (*product.Router, error) {
 	wire.Build(ProductSet)
+	return nil, nil
+}
+
+func InitUserRouterHandler() (*controllers.UsersController, error) {
+	wire.Build(UserSet)
 	return nil, nil
 }

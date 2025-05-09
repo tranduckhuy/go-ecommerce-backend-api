@@ -24,6 +24,15 @@ func InitProductRouter() (*product.Router, error) {
 	return router, nil
 }
 
+func InitUserRouterHandler() (*controllers.UsersController, error) {
+	userRepository := repositories.NewUserRepository()
+	userService := services.NewUserService(userRepository)
+	usersController := controllers.NewUsersController(userService)
+	return usersController, nil
+}
+
 // wire.go:
 
 var ProductSet = wire.NewSet(repositories.NewProductRepository, services.NewProductService, controllers.NewProductController, product.NewRouter)
+
+var UserSet = wire.NewSet(repositories.NewUserRepository, services.NewUserService, controllers.NewUsersController)
